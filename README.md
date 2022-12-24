@@ -49,3 +49,8 @@ Ref: https://developers.google.com/identity/protocols/oauth2/production-readines
 ## Learn about Youtube api access: 
 Ref: https://developers.google.com/people/quickstart/python
 https://www.youtube.com/watch?v=E4lX2lnKsPM
+
+<br/>
+
+# License
+The source code for the site is licensed under the MIT license, which you can find in the LICENSE file.
