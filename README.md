@@ -1,11 +1,22 @@
-# Spotify Permissions:
-## 'spotify_user_id':
+
+# Songs-To-Spotify 
+Hi there! <br>
+Songs-to-spotify is a Python project used to automate actions in your spotify account.
+The main feature currently available is the migration of playlists from Youtube to Spotify.
+
+<br>
+
+# Usage
+In order to do so you will require permissions to authenticate with for each API provider.
+
+## Spotify Permissions:
+### 'spotify_user_id':
 1. Login to Spotify
 2. Getting user id:
     a. Login to your spotify application or web, click icon on top right
     b. Click on 'Account'
     c. In opened page, under 'Account overview' copy 'Username' string and use it under 'spotify_user_id'.
-## 'spotify_token':
+### 'spotify_token':
 1. Login into: https://developer.spotify.com/console/get-recommendations/
 2. Getting token from Spotify:
     - At the bottom of the page click 'GET TOKEN'
@@ -19,20 +30,15 @@
 
 3. Copy token and use it under 'spotify_token'
 
-<br/>
-
-# Youtube Permissions:
-## Prerequisites:
-#### Enable Youtube v3 API:
-In your GCP project, allow access to Youtube api at: https://console.cloud.google.com/apis/library/youtube.googleapis.com
-
+## Youtube Permissions:
+### Prerequisites:
+##### Enable Youtube v3 API:
+In your GCP project, allow access to Youtube api at: https://console.cloud.google.com/apis/library/youtube.googleapis.com <br>
 If Youtube api is not yet enabled, Click 'Enable'.
 
-<br/>
-
-## Access Credentials For Youtube API:
-### 1) Choose one of the following:
-#### Credentials file access (Recommended):
+### Access Credentials For Youtube API:
+#### 1) Choose one of the following:
+##### Credentials file access (Recommended):
 - Go to: https://console.cloud.google.com/apis/
 - Add tester's user mail address:
     - Press 'OAuth consent screen'
@@ -42,15 +48,21 @@ If Youtube api is not yet enabled, Click 'Enable'.
     - Download credentials file
     - Update 'youtube_client_secrets_file_path' variable with the file path
 
-#### 2) User authorised access:
+##### 2) User authorised access:
 Ref: https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification?hl=en#submit-app-for-verification
 
 
-## Learn about Youtube api access: 
+### Learn about Youtube api access: 
 Ref: https://developers.google.com/people/quickstart/python
 https://www.youtube.com/watch?v=E4lX2lnKsPM
 
-<br/>
+<br>
 
-# License
+## Support
+Any issues, comments, suggestions or straight on complements are very welcome. <br>
+Hope you enjoy and thanks in advance!
+
+<br>
+
+## License
 The source code for the site is licensed under the MIT license, which you can find in the LICENSE file.
