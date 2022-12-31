@@ -19,27 +19,6 @@ class Spotify:
         playlist_name = response.json()['name']
         return playlist_name
 
-    def search_for_track_uri_by_name(self, track_name): # required scope: []
-        limit=1
-        search_url = f'https://api.spotify.com/v1/search?q={track_name}&limit={limit}&type=track'
-
-        response = requests.get(search_url, 
-                                headers={"Content-Type":"application/json", 
-                                         "Authorization":f"Bearer {self.token}"})
-        response.raise_for_status()
-        response_json = response.json()
-
-        if response_json['tracks']['total'] == 0:
-            return False
-        
-        track_list = response_json.get('tracks')['items'][0]
-        track_uri = track_list['uri']
-        track_name = track_list['name']
-        track_artist = track_list['artists'][0]['name']
-
-        log.info(f"Found \"{track_name}\" by {track_artist}")
-        return track_uri
-
     def get_total_liked_tracks(self): # required scope: [user-library-read]
         tracks_url = 'https://api.spotify.com/v1/me/tracks?offset=0&limit=1'
 
@@ -109,6 +88,27 @@ class Spotify:
 
         return ids
 
+    def search_for_track_uri_by_name(self, track_name): # required scope: []
+        limit=1
+        search_url = f'https://api.spotify.com/v1/search?q={track_name}&limit={limit}&type=track'
+
+        response = requests.get(search_url, 
+                                headers={"Content-Type":"application/json", 
+                                         "Authorization":f"Bearer {self.token}"})
+        response.raise_for_status()
+        response_json = response.json()
+
+        if response_json['tracks']['total'] == 0:
+            return False
+        
+        track_list = response_json.get('tracks')['items'][0]
+        track_uri = track_list['uri']
+        track_name = track_list['name']
+        track_artist = track_list['artists'][0]['name']
+
+        log.info(f"Found \"{track_name}\" by {track_artist}")
+        return track_uri
+
     def like_track_by_id(self, id): # required scope: [user-library-modify]
         like_track_url = f'https://api.spotify.com/v1/me/tracks?ids={id}'
 
@@ -130,7 +130,6 @@ class Spotify:
 
     def create_playlist(self, playlist_name): # required scope: [user-library-modify]
         create_playlist_url = f"https://api.spotify.com/v1/users/{self.user_id}/playlists"
-        print(create_playlist_url)
         log.info(f"Creating playlist '{playlist_name}':")
         request_body = json.dumps({
                 "name": playlist_name,
