@@ -27,7 +27,8 @@ class Spotify:
         response = requests.get(playlist_url,
                                 headers={"Content-Type":"application/json", 
                                          "Authorization":f"Bearer {self.token}"})
-        self.verify_response(response)
+        response.raise_for_status()
+        # self.verify_response(response)
 
         playlist_name = response.json()['name']
         return playlist_name
@@ -39,7 +40,8 @@ class Spotify:
         response = requests.get(search_url, 
                                 headers={"Content-Type":"application/json", 
                                          "Authorization":f"Bearer {self.token}"})
-        self.verify_response(response)
+        response.raise_for_status()
+        # self.verify_response(response)
         response_json = response.json()
 
         if response_json['tracks']['total'] == 0:
@@ -59,7 +61,8 @@ class Spotify:
         response = requests.get(tracks_url,
                                 headers={"Content-Type":"application/json", 
                                          "Authorization":f"Bearer {self.token}"})
-        self.verify_response(response)
+        response.raise_for_status()
+        # self.verify_response(response)
         json_response = response.json()
 
         print(json_response)
@@ -73,7 +76,8 @@ class Spotify:
         response = requests.get(url = playlists_url, 
                                 headers={"Content-Type":"application/json",
                                          "Authorization":f"Bearer {self.token}"})
-        self.verify_response(response)
+        response.raise_for_status()
+        # self.verify_response(response)
 
         playlists_ids = [item['id'] for item in response.json()['items']]
         return playlists_ids
@@ -88,7 +92,8 @@ class Spotify:
             response = requests.get(query, 
                                     headers={"Content-Type":"application/json", 
                                              "Authorization":f"Bearer {self.token}"})
-            self.verify_response(response)
+            response.raise_for_status()
+            # self.verify_response(response)
             json_response = response.json()
 
             for _,j in enumerate(json_response['items']):
@@ -102,7 +107,8 @@ class Spotify:
         response = requests.get(get_playlist_url, 
                                 headers={"Content-Type":"application/json", 
                                          "Authorization":f"Bearer {self.token}"})
-        self.verify_response(response)
+        response.raise_for_status()
+        # self.verify_response(response)
         json_response = response.json()
 
         while True:
@@ -117,7 +123,8 @@ class Spotify:
                                     headers={"Content-Type":"application/json", 
                                             "Authorization":f"Bearer {self.token}"})
             json_response = response.json()
-            self.verify_response(response)
+            response.raise_for_status()
+            # self.verify_response(response)
         return ids
 
     def like_track_by_id(self, id): # required scope: [user-library-modify]
@@ -126,7 +133,8 @@ class Spotify:
         response = requests.put(like_track_url,
                                 headers={"Content-Type":"application/json", 
                                          "Authorization":f"Bearer {self.token}"})
-        self.verify_response(response)
+        response.raise_for_status()
+        # self.verify_response(response)
         return True
 
     def like_all_tracks_in_playlist(self, playlist_id): # required scope: [user-library-modify, playlist-read-private, playlist-read-public]
@@ -152,7 +160,8 @@ class Spotify:
                                  data = request_body, 
                                  headers={"Content-Type":"application/json", 
                                          "Authorization":f"Bearer {self.token}"})
-        self.verify_response(response)
+        response.raise_for_status()
+        # self.verify_response(response)
 
         print(f"Created playlist '{playlist_name}'")
         playlist_id = response.json()['id']
@@ -170,7 +179,8 @@ class Spotify:
                                      data=request_body, 
                                      headers={"Content-Type":"application/json",
                                              "Authorization":f"Bearer {self.token}"})
-            self.verify_response(response)
+            response.raise_for_status()
+            # self.verify_response(response)
 
     def tracks_to_spotify_playlist(self, playlist_name, tracks_list): # required scope: [user-library-modify]
         tracks_uris = []
