@@ -47,7 +47,7 @@ class Youtube:
         ids_list = [item['id'] for item in response.get('items')]
         log.info(f"Found {len(ids_list)} playlists")
         return ids_list
-        
+
     def get_playlist_id_name(self, id) -> dict:
         response = self.youtube_api.playlists().list(
             part="snippet,contentDetails",
@@ -61,7 +61,7 @@ class Youtube:
         playlist_map = {id: response.get('items')[0]['snippet']['title']}
         return playlist_map
 
-    def get_songs_by_playlist_id(self, id):
+    def get_all_tracks_by_playlist_id(self, id):
         response = self.youtube_api.playlistItems().list(
             part="snippet,contentDetails",
             maxResults=5,

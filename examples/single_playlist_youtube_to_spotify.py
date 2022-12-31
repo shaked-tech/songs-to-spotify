@@ -23,5 +23,5 @@ if __name__ == '__main__':
     source_playlist_id = list(playlist_map.keys())[0]
     source_playlist_name = playlist_map.get(source_playlist_id)
 
-    songs_list = youtube.get_songs_by_playlist_id(source_playlist_id)
+    songs_list = youtube.get_tracks_by_playlist_id(source_playlist_id)
     spotify.tracks_to_spotify_playlist(source_playlist_name, songs_list)
