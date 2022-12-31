@@ -48,41 +48,117 @@ class Youtube:
         log.info(f"Found {len(ids_list)} playlists")
         return ids_list
 
-    def get_playlist_id_name(self, id) -> dict:
+    def get_playlist_id_title(self, playlist_id) -> dict:
         response = self.youtube_api.playlists().list(
             part="snippet,contentDetails",
             maxResults=1,
-            id=id
+            id=playlist_id
         ).execute()
+
         if len(response.get('items')) > 1:
             raise
 
-        log.debug(f"{id}: {response.get('items')[0]['snippet']['title']}")
-        playlist_map = {id: response.get('items')[0]['snippet']['title']}
+        log.debug(f"{playlist_id}: {response.get('items')[0]['snippet']['title']}")
+        playlist_map = {playlist_id: response.get('items')[0]['snippet']['title']}
         return playlist_map
 
-    def get_all_tracks_by_playlist_id(self, id):
+    def get_video_title_by_id(self, video_id):
+        """Get string of title of video"""
+        response = self.youtube_api.videos().list(
+            part="snippet",
+            id=video_id
+        ).execute()
+
+        return response["items"][0]["snippet"]["title"]
+
+    def get_playlist_title_by_id(self, playlist_id):
+        """Get string playlist title of playlist"""
+        response = self.youtube_api.playlists().list(
+            part="snippet",
+            id=playlist_id,
+            maxResults=1,
+        ).execute()
+
+        return response["items"][0]["snippet"]["title"]
+
+    def get_videos_by_playlist_id(self, playlist_id) -> list:
+        """Get a list containing videos ids of playlist"""
         response = self.youtube_api.playlistItems().list(
             part="snippet,contentDetails",
-            maxResults=5,
-            playlistId=id
+            maxResults=50,
+            playlistId=playlist_id
         ).execute()
+
         if 1 > response.get('pageInfo').get('totalResults'):
             print("No items found in playlist")
-            return
+            return []
         else:
             items = response.get('items')
             nextPageToken = response.get('nextPageToken')
             while nextPageToken:
                 response_next_page = self.youtube_api.playlistItems().list(
                     part="snippet,contentDetails",
-                    maxResults=25,
-                    playlistId=id,
+                    maxResults=50,
+                    playlistId=playlist_id,
                     pageToken=nextPageToken
                 ).execute()
                 items.extend(response_next_page.get('items'))
                 nextPageToken = response_next_page.get('nextPageToken')
-            log.debug(f"found {len(items)} items for playlist {id}")
+            log.debug(f"found {len(items)} items for playlist {playlist_id}")
 
-            songs_list = [item['snippet']['title'] for item in items]
+            songs_list = [item["snippet"]["resourceId"]["videoId"] for item in items]
             return songs_list
+
+    def get_all_video_ids_in_playlist(self, playlist_id):
+        response = self.youtube_api.playlistItems().list(
+            part="snippet",
+            playlistId=playlist_id,
+            maxResults=50,
+        ).execute()
+
+        video_ids = [response["snippet"]["resourceId"]["videoId"] for response in response["items"]]
+        return video_ids
+
+    def rate_video_by_id(self, video_id, rate) -> None:
+        """Unrate video"""
+        log.debug(f"rating {video_id} with {rate}")
+        try:
+            self.youtube_api.videos().rate(
+                id=video_id,
+                rating=rate
+            ).execute()
+        except HttpError as e:
+            video_name = self.get_video_title_by_id(video_id)
+            log.WARNING(f"could not rate {video_name}, {e}")
+
+    def create_playlist(self, playlist_title, playlist_description="", tags=[], defaultLanguage="en", privacyStatus="private"):
+        response = self.youtube_api.playlists().insert(
+            part="snippet,status",
+            body = {
+                "snippet": {
+                    "title": playlist_title,
+                    "description": playlist_description,
+                    "tags": tags,
+                    "defaultLanguage": defaultLanguage
+                },
+                "status": {
+                    "privacyStatus": privacyStatus
+                }
+            }
+        ).execute()
+
+        return(response["id"])
+
+    def rate_all_videos_in_playlist(self, playlist_id: str, rate: str):
+        """Rate all videos in a playlist with one of: ['like','dislike','none']"""
+        # method = {'like':self.like_video_by_id(id),'dislike':self.dislike_video_by_id(id),'none':self.unrate_video_by_id(id)}
+        playlist_name = self.get_playlist_title_by_id(playlist_id)
+        ids = self.get_all_video_ids_in_playlist(playlist_id)
+
+        log.info(f"Rating songs in playlist '{playlist_name}' with {rate}")
+        for id in ids:
+            self.rate_video_by_id(id, rate)
+
+# TODO:
+    # def upload_videos_to_playlist(self, playlist_id, videos_uris):
+    # def videos_to_youtube_playlist(self, playlist_title, videos_list):
