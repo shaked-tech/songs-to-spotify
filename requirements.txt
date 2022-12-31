@@ -1,5 +1,4 @@
 requests
 datetime
-bs4
 google-auth-oauthlib
 google-api-python-client
