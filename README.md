@@ -1,5 +1,4 @@
-
-# Songs-To-Spotify 
+# Songs-To-Spotify
 Hi there! <br>
 Songs-to-spotify is a Python project used to automate actions in your spotify account.
 The main feature currently available is the migration of playlists from Youtube to Spotify.
@@ -8,19 +7,39 @@ The main feature currently available is the migration of playlists from Youtube 
 
 # Usage
 In order to do so you will require permissions to authenticate with for each API provider.
+### Examples
+
+#### Migrate Single YouTube Playlist to Spotify:
+To migrate a single YouTube playlist to Spotify, use the following command:
+
+```bash
+python3 examples/single_playlist_youtube_to_spotify.py migrate \
+    --youtube-secrets=/path/to/client_secrets.json \
+    --youtube-playlist=YOUTUBE_PLAYLIST_ID \
+    --spotify-user=YOUR_SPOTIFY_USER_ID \
+    --spotify-token=YOUR_SPOTIFY_TOKEN
+```
+
+Replace the following values:
+- `/path/to/client_secrets.json`: Path to your YouTube API credentials file
+- `YOUTUBE_PLAYLIST_ID`: ID of the YouTube playlist you want to migrate (found in the playlist URL)
+- `YOUR_SPOTIFY_USER_ID`: Your Spotify user ID (from steps above)
+- `YOUR_SPOTIFY_TOKEN`: Your Spotify API token (from steps above)
+
+The script will create a new Spotify playlist with the same name as the YouTube playlist and copy all available songs.
 
 ## Spotify Permissions:
 ### 'spotify_user_id':
-1. Login to Spotify
-2. Getting user id: <br>
+1. Getting user id: <br>
     a. Login to your spotify application or web, click icon on top right. <br>
     b. Click on 'Account'. <br>
     c. In opened page, under 'Account overview' copy 'Username' string and use it under 'spotify_user_id'.
+
 ### 'spotify_token':
 1. Login into: https://developer.spotify.com/console/get-recommendations/
 2. Getting token from Spotify:
     - At the bottom of the page click 'GET TOKEN'
-    - Depending on the action you want to preform you will need to allow differant permissions, ('modify' permissions allow read+write):
+    - Depending on the action you want to preform you will need to allow different permissions ('modify' permissions allow read+write):
         - 'playlist-read-private' - Read permissions for private playlists.
         - 'playlist-modify-private' - Write permissions for private playlists.
         - 'playlist-read-public' - Read permissions for public playlists.
@@ -31,28 +50,40 @@ In order to do so you will require permissions to authenticate with for each API
 3. Copy token and use it under 'spotify_token'
 
 ## Youtube Permissions:
+### 'youtube_playlist':
+1. Get playlist ID:
+    - Go to the YouTube playlist you want to migrate
+    - Copy the playlist ID from the URL, starting with 'PL-...'
+
 ### Prerequisites:
 ##### Enable Youtube v3 API:
 In your GCP project, allow access to Youtube api at: https://console.cloud.google.com/apis/library/youtube.googleapis.com <br>
 If Youtube api is not yet enabled, Click 'Enable'.
 
 ### Access Credentials For Youtube API:
-#### 1) Choose one of the following:
-##### Credentials file access (Recommended):
+#### Choose one of the following:
+##### 1) Credentials file access (Recommended):
 - Go to: https://console.cloud.google.com/apis/
+
+'create branding'
+
 - Add tester's user mail address:
     - Press 'OAuth consent screen'
-    - Under test users, add the email used to authenticate 
+    - Under test users, add the email used to authenticate
 - Create credentials file:
     - 'create credentials' --> 'OAuth client ID' --> select 'Desktop app' + enter name --> Create
     - Download credentials file
     - Update 'youtube_client_secrets_file_path' variable with the file path
+- Add authorized user:
+    - Under 'Test users', press 'ADD USERS'
+    - Enter user email address
+    
 
 ##### 2) User authorised access:
 Ref: https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification?hl=en#submit-app-for-verification
 
 
-### Learn about Youtube api access: 
+### Learn about Youtube api access:
 Ref: https://developers.google.com/people/quickstart/python
 https://www.youtube.com/watch?v=E4lX2lnKsPM
 
