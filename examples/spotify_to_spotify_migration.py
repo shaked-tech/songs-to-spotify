@@ -1,13 +1,13 @@
-import logging as log
 import sys
 from os import environ
 from pathlib import Path
+import logging as log
+import fire
 
 # Add parent directory to Python path
 sys.path.insert(1, str(Path(__file__).parent.parent))
 
 from spotify import Spotify, SpotifyError
-import fire
 
 
 def setup_logging() -> None:

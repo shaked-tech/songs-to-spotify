@@ -3,6 +3,7 @@ import logging as log
 from dataclasses import dataclass
 from time import sleep
 from typing import Dict, List, Optional
+import re
 
 import requests
 from requests.exceptions import RequestException
@@ -213,7 +214,8 @@ class Spotify:
 
         Args:
             playlist_id (str): Spotify playlist ID
-            playlist_name (str): Name for the new playlist, if both playlist_id and playlist_name are empty, a new playlist will not be created
+            playlist_name (str): Name for the new playlist, if both playlist_id and playlist_name are empty,
+            a new playlist will not be created
             tracks_list (List[str]): List of track names to search and add
         """
         tracks_uris = []
@@ -226,7 +228,6 @@ class Spotify:
             for index, track_name in enumerate(tracks_list):
                 print(f"Searching songs{dots[index % len(dots)]}    ", end="\r")
                 log.debug(f"Searching for track: {track_name}")
-                import re
                 track_name_formated = re.sub(r'\([^)]*\)', '', track_name)
                 name_parts = track_name_formated.split(' - ')
                 if len(name_parts) > 1:
@@ -244,7 +245,10 @@ class Spotify:
                 log.info(f"Searching songs{dots[-1]}Done")
                 sleep(1.1)
 
-                log.info(f"Added {len(tracks_uris)} songs to playlist: '{playlist_name}' (https://open.spotify.com/playlist/{playlist_id})")
+                log.info(
+                    f"Added {len(tracks_uris)} songs to playlist: '{playlist_name}' \
+                     (https://open.spotify.com/playlist/{playlist_id})"
+                )
                 if self.not_found_list:
                     log.warning(f"Could not find {len(self.not_found_list)} songs: {self.not_found_list}")
         except SpotifyError as e:
@@ -280,7 +284,7 @@ class Spotify:
         while True:
             playlist_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?offset={offset}&limit={limit}"
             response = self._make_request("get", playlist_url)
-            
+
             if not response["items"]:
                 break
 

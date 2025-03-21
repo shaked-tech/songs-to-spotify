@@ -98,7 +98,7 @@ If Youtube api is not yet enabled, Click 'Enable'.
 - Add authorized user:
     - Under 'Test users', press 'ADD USERS'
     - Enter user email address
-    
+
 
 ##### 2) User authorised access:
 Ref: https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification?hl=en#submit-app-for-verification

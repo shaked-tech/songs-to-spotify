@@ -1,19 +1,19 @@
-import logging as log
+import os
 import sys
-from os import environ
 from pathlib import Path
+import logging as log
 import fire
 
-# Add parent directory to Python path
+# Add parent directory to Python path before any local imports
 sys.path.insert(1, str(Path(__file__).parent.parent))
 
-# Import local modules after path setup
 from spotify import Spotify, SpotifyError
 from youtube import Youtube, YouTubeError
 
+
 def setup_logging() -> None:
     """Configure logging based on environment variable"""
-    log_level = environ.get("LOGLEVEL", "INFO").upper()
+    log_level = os.environ.get("LOGLEVEL", "INFO").upper()
     log.basicConfig(level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 
@@ -53,8 +53,10 @@ class PlaylistMigrator:
                 log.warning("No songs found in the YouTube playlist")
                 sys.exit(1)
 
-            log.info(f"Creating Spotify playlist with {len(songs_list)} songs")
-            spotify.tracks_to_spotify_playlist(source_playlist_name, songs_list)
+            log.info(f"Creating playlist with {len(songs_list)} songs")
+            spotify.tracks_to_spotify_playlist(
+                playlist_id="", playlist_name=source_playlist_name, tracks_list=songs_list
+            )
             log.info(f"Successfully migrated playlist: {source_playlist_name}")
 
         except (YouTubeError, SpotifyError) as e:
