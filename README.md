@@ -28,6 +28,27 @@ Replace the following values:
 
 The script will create a new Spotify playlist with the same name as the YouTube playlist and copy all available songs.
 
+#### Migrate Playlist Between Spotify Accounts:
+To migrate a playlist from one Spotify account to another, use the following command:
+
+```bash
+python3 examples/spotify_to_spotify_migration.py migrate \
+    --source-user=SOURCE_SPOTIFY_USER_ID \
+    --source-token=SOURCE_SPOTIFY_TOKEN \
+    --target-user=TARGET_SPOTIFY_USER_ID \
+    --target-token=TARGET_SPOTIFY_TOKEN \
+    --playlist-id=PLAYLIST_ID
+```
+
+Replace the following values:
+- `SOURCE_SPOTIFY_USER_ID`: User ID of the source Spotify account
+- `SOURCE_SPOTIFY_TOKEN`: API token for the source Spotify account
+- `TARGET_SPOTIFY_USER_ID`: User ID of the target Spotify account
+- `TARGET_SPOTIFY_TOKEN`: API token for the target Spotify account
+- `PLAYLIST_ID`: ID of the playlist to migrate (found in the playlist URL)
+
+The script will create a new playlist in the target account with the same name and songs as the source playlist.
+
 ## Spotify Permissions:
 ### 'spotify_user_id':
 1. Getting user id: <br>
